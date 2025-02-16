@@ -21,11 +21,17 @@ const fetchVideos = async (
   }`;
   const data = await client.fetch(query, { categoryTitle });
   const videoFiles: VideoFile[] =
-    data[0]?.videoFiles?.map((item: any) => ({
-      title: item?.videoTitle,
-      url: item?.videoFile?.asset?.url,
-      duration: item?.duration || null,
-    })) || [];
+    data[0]?.videoFiles?.map(
+      (item: {
+        videoTitle: string;
+        videoFile: { asset: { url: string } };
+        duration: number | null;
+      }) => ({
+        title: item?.videoTitle,
+        url: item?.videoFile?.asset?.url,
+        duration: item?.duration || null,
+      })
+    ) || [];
   return videoFiles;
 };
 
